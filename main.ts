@@ -323,9 +323,9 @@ function Atk (WInvis: boolean, Melee: boolean, AImage: Image, AFatal: boolean, D
         if (sprites.readDataNumber(mySprite, "Weapon") == sprites.readDataNumber(mySprite, "WeaponASlot")) {
             sprites.changeDataNumberBy(Weapon, "WeaponADura", -1)
             DuraText.setText("" + sprites.readDataNumber(Weapon, "WeaponADura") + "/" + ListDurability[sprites.readDataNumber(mySprite, "Weapon")])
-            if (sprites.readDataNumber(Weapon, "WeaponADura") == 0) {
-                sprites.setDataNumber(mySprite, "WeaponASlot", 1)
-                sprites.setDataNumber(mySprite, "Weapon", 1)
+            if (sprites.readDataNumber(Weapon, "WeaponADura") <= 0) {
+                sprites.setDataNumber(mySprite, "WeaponASlot", ListStorage[21])
+                sprites.setDataNumber(mySprite, "Weapon", ListStorage[21])
             }
             if (sprites.readDataNumber(mySprite, "WeaponASlot") <= 3) {
                 sprites.changeDataNumberBy(Weapon, "WeaponADura", 1)
@@ -334,9 +334,9 @@ function Atk (WInvis: boolean, Melee: boolean, AImage: Image, AFatal: boolean, D
         } else if (sprites.readDataNumber(mySprite, "Weapon") == sprites.readDataNumber(mySprite, "WeaponBSlot")) {
             sprites.changeDataNumberBy(Weapon, "WeaponBDura", -1)
             DuraText.setText("" + sprites.readDataNumber(Weapon, "WeaponBDura") + "/" + ListDurability[sprites.readDataNumber(mySprite, "Weapon")])
-            if (sprites.readDataNumber(Weapon, "WeaponBDura") == 0) {
-                sprites.setDataNumber(mySprite, "WeaponBSlot", 2)
-                sprites.setDataNumber(mySprite, "Weapon", 2)
+            if (sprites.readDataNumber(Weapon, "WeaponBDura") <= 0) {
+                sprites.setDataNumber(mySprite, "WeaponBSlot", ListStorage[22])
+                sprites.setDataNumber(mySprite, "Weapon", ListStorage[22])
             }
             if (sprites.readDataNumber(mySprite, "WeaponBSlot") <= 3) {
                 sprites.changeDataNumberBy(Weapon, "WeaponBDura", 1)
@@ -1794,8 +1794,11 @@ function EnemyDeath (otherSprite: Sprite) {
                 ListStorage[11] = ListStorage[11] - 1
                 if (ListStorage[11] > 0) {
                     sprites.setDataBoolean(mySprite, "Mark", true)
+                    Enemies(75, 75, 2, 8, Enemy1, randint(5, 8), assets.animation`Enemy2Spawn`, assets.image`Enemy2`)
+                    tiles.placeOnRandomTile(Enemy1, assets.tile`BackBrick13`)
+                    sprites.setDataBoolean(Enemy1, "Mark", true)
                     Summoner(1, assets.tile`Brick3`, assets.tile`Brick3`, 50)
-                    Summoner(2, assets.tile`BackBrick13`, assets.tile`BackBrick3`, 50)
+                    Summoner(2, assets.tile`BackBrick13`, assets.tile`BackBrick13`, 50)
                     Summoner(4, assets.tile`BackBrick14`, assets.tile`BackBrick14`, 50)
                     if (ListStorage[2] == 1) {
                         for (let value of tiles.getTilesByType(assets.tile`Wood0`)) {
@@ -2934,7 +2937,8 @@ function _1BossAttack (Atk2: number) {
             100,
             false
             )
-            Summoner(2, assets.tile`BackBrick13`, assets.tile`BackBrick13`, 100)
+            Enemies(75, 75, 2, 8, Enemy1, randint(5, 8), assets.animation`Enemy2Spawn`, assets.image`Enemy2`)
+            tiles.placeOnTile(Enemy1, tiles.getTileLocation(randint(9, 21), randint(10, 14)))
             timer.after(1500, function () {
                 if (sprites.readDataNumber(Boss, "HP") <= 500) {
                     _1BossAttack(randint(1, 6))
@@ -4082,7 +4086,7 @@ browserEvents.MouseLeft.onEvent(browserEvents.MouseButtonEvent.Pressed, function
                     Atk(false, false, image.create(8, 8), true, 20, 20, 2000, 500, false, -3, -3, x, y, assets.animation`MagicBolt`, assets.animation`StaffIR`, assets.animation`IsolShootRight`, assets.animation`MagicBolt`, assets.animation`StaffIL`, assets.animation`IsolShootLeft`, 15, true)
                     ProjTrackII(Attack, x + scene.cameraProperty(CameraProperty.Left), y + scene.cameraProperty(CameraProperty.Top), 175)
                 } else if (sprites.readDataNumber(mySprite, "Weapon") == 4) {
-                    Atk(true, true, image.create(80, 24), true, 50, 40, 600, 900, true, 0, 0, x, y, assets.animation`WhipR`, assets.animation`WhipIR`, assets.animation`IsolMelee2Right`, assets.animation`WhipL`, assets.animation`WhipIL`, assets.animation`IsolMelee2Left`, 0, false)
+                    Atk(true, true, image.create(80, 24), true, 50, 40, 500, 800, true, 0, 0, x, y, assets.animation`WhipR`, assets.animation`WhipIR`, assets.animation`IsolMelee2Right`, assets.animation`WhipL`, assets.animation`WhipIL`, assets.animation`IsolMelee2Left`, 0, false)
                 } else if (sprites.readDataNumber(mySprite, "Weapon") == 5) {
                     Atk(false, false, assets.image`TestProj`, true, 8, 0, 1000, 10, false, 0, 5, x, y, assets.animation`LaserR`, assets.animation`LaserIR`, assets.animation`IsolShootRight`, assets.animation`LaserL`, assets.animation`LaserIL`, assets.animation`IsolShootLeft`, 5, false)
                     ProjTrackII(Attack, x + scene.cameraProperty(CameraProperty.Left), y + scene.cameraProperty(CameraProperty.Top), 150)
@@ -4111,7 +4115,7 @@ browserEvents.MouseLeft.onEvent(browserEvents.MouseButtonEvent.Pressed, function
                         ProjTrackII(Attack, x + scene.cameraProperty(CameraProperty.Left) + randint(-20, 20), y + scene.cameraProperty(CameraProperty.Top) + randint(-20, 20), randint(150, 225))
                     }
                 } else if (sprites.readDataNumber(mySprite, "Weapon") == 11) {
-                    Atk(true, true, image.create(32, 16), true, 30, 5, 300, 200, true, 0, 0, x, y, assets.animation`DaggerR`, assets.animation`DaggerIR`, assets.animation`IsolMeleeRight`, assets.animation`DaggerL`, assets.animation`DaggerIL`, assets.animation`IsolMeleeLeft`, 0, false)
+                    Atk(true, true, image.create(32, 16), true, 30, 5, 300, 100, true, 0, 0, x, y, assets.animation`DaggerR`, assets.animation`DaggerIR`, assets.animation`IsolMeleeRight`, assets.animation`DaggerL`, assets.animation`DaggerIL`, assets.animation`IsolMeleeLeft`, 0, false)
                 } else if (sprites.readDataNumber(mySprite, "Weapon") == 12) {
                     Atk(true, true, image.create(80, 80), true, 30, 0, 600, 600, true, 0, 0, x, y, assets.animation`SoulSwordR`, assets.animation`SoulSwordIR`, assets.animation`IsolMeleeRight`, assets.animation`SoulSwordL`, assets.animation`SoulSwordIL`, assets.animation`IsolMeleeLeft`, 12, false)
                 } else if (sprites.readDataNumber(mySprite, "Weapon") == 13) {
@@ -4665,7 +4669,9 @@ function Overview (Alive: boolean) {
             ListStorage[12],
             ListStorage[16],
             ListStorage[17],
-            ListStorage[18]
+            ListStorage[18],
+            ListStorage[21],
+            ListStorage[22]
             ]
             for (let index = 0; index <= 15; index++) {
                 ListSaves.push(ListEffects[index])
@@ -4864,6 +4870,8 @@ THETA()
 // 18: Spire
 // 19:ManaCoolDown
 // 20: Inventory?
+// 21: WeaponAI
+// 22: WeaponBI
 ListStorage = [
 -1,
 1,
@@ -4885,7 +4893,9 @@ randint(2, 3),
 randint(5, 6),
 1,
 40,
-0
+0,
+randint(-2, 3),
+randint(2, 3)
 ]
 Decoration = sprites.create(assets.image`SoulSpire`, SpriteKind.Decor)
 Button = sprites.create(assets.image`NewGame`, SpriteKind.PressStation)
@@ -4932,8 +4942,15 @@ mySprite.z = 1
 sprites.setDataString(mySprite, "State", "Idle")
 sprites.setDataNumber(mySprite, "HP", 100)
 sprites.setDataNumber(mySprite, "Mana", 100)
-sprites.setDataNumber(mySprite, "WeaponASlot", 1)
-sprites.setDataNumber(mySprite, "WeaponBSlot", 2)
+if (ListStorage[21] <= 1) {
+    ListStorage[21] = 1
+    ListStorage[22] = ListStorage[22]
+} else {
+    ListStorage[21] = ListStorage[21]
+    ListStorage[22] = ListStorage[21] * -1 + 5
+}
+sprites.setDataNumber(mySprite, "WeaponASlot", ListStorage[21])
+sprites.setDataNumber(mySprite, "WeaponBSlot", ListStorage[22])
 sprites.setDataNumber(mySprite, "Weapon", sprites.readDataNumber(mySprite, "WeaponASlot"))
 CameraSpr = sprites.create(assets.image`Camma`, SpriteKind.Camman)
 tiles.placeOnTile(CameraSpr, tiles.getTileLocation(9, 4))
@@ -5090,7 +5107,7 @@ ListDurability = [
 125,
 25,
 90,
-70,
+350,
 400,
 180,
 50,
@@ -5133,6 +5150,8 @@ if (blockSettings.exists("Save")) {
     ListStorage[12] = blockSettings.readNumberArray("Save")[7]
     ListStorage[1] = 1
     ListStorage[18] = blockSettings.readNumberArray("Save")[10]
+    ListStorage[21] = blockSettings.readNumberArray("Save")[11]
+    ListStorage[22] = blockSettings.readNumberArray("Save")[12]
     MoneyText.setText(convertToText(blockSettings.readNumberArray("Save")[7]))
     sprites.setDataNumber(mySprite, "HP", blockSettings.readNumberArray("Save")[0])
     sprites.setDataNumber(mySprite, "WeaponASlot", blockSettings.readNumberArray("Save")[1])
@@ -5141,7 +5160,7 @@ if (blockSettings.exists("Save")) {
     sprites.setDataNumber(Weapon, "WeaponADura", blockSettings.readNumberArray("Save")[2])
     sprites.setDataNumber(Weapon, "WeaponBDura", blockSettings.readNumberArray("Save")[4])
     for (let index = 0; index <= 15; index++) {
-        ListEffects[index] = blockSettings.readNumberArray("Save")[11 + index]
+        ListEffects[index] = blockSettings.readNumberArray("Save")[13 + index]
     }
     tiles.placeOnRandomTile(CameraSpr, assets.tile`BackBrick0`)
 }
@@ -5176,10 +5195,12 @@ game.onUpdateInterval(randint(1600, 7000), function () {
             100,
             false
             )
-            color.setColor(8, color.parseColorString("#0032b3"), 100)
-            timer.after(500, function () {
-                color.setColor(8, color.parseColorString("#002b75"), 1000)
-            })
+            if (mySprite.tilemapLocation().row >= 15) {
+                color.setColor(8, color.parseColorString("#0032b3"), 100)
+                timer.after(500, function () {
+                    color.setColor(8, color.parseColorString("#002b75"), 1000)
+                })
+            }
         } else {
             animation.runImageAnimation(
             Decoration,
