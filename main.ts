@@ -3478,23 +3478,6 @@ function Death (Cause: string) {
         })
     }
 }
-browserEvents.onMouseMove(function (x, y) {
-    sprites.setDataNumber(Cursor, "X", x)
-    sprites.setDataNumber(Cursor, "Y", y)
-    if (ListStorage[20] >= 0 && Math.abs(x - 68) < 44) {
-        for (let value of sprites.allOfKind(SpriteKind.Press)) {
-            if (y >= 92) {
-                value.vy = -64
-            } else if (y <= 33) {
-                value.vy = 64
-            } else {
-                value.vy = 0
-            }
-        }
-    } else {
-    	
-    }
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.SwingDoor, function (sprite, otherSprite) {
     if (mySprite.x - otherSprite.x < 0) {
         animation.runImageAnimation(
@@ -3623,6 +3606,23 @@ function SpireConclude () {
         })
     })
 }
+browserEvents.onMouseMove(function (x, y) {
+    sprites.setDataNumber(Cursor, "X", x)
+    sprites.setDataNumber(Cursor, "Y", y)
+    if (ListStorage[20] >= 0 && Math.abs(x - 68) < 44) {
+        for (let value of sprites.allOfKind(SpriteKind.Press)) {
+            if (y >= 92) {
+                value.vy = -64
+            } else if (y <= 33) {
+                value.vy = 64
+            } else {
+                value.vy = 0
+            }
+        }
+    } else {
+    	
+    }
+})
 function SpirePeak (TileMaps: tiles.TileMapData[], AFlood: number, BWaves: number, CFlood: number) {
     tiles.setCurrentTilemap(TileMaps[(ListStorage[10] + 1) * -1])
     if (ListStorage[10] == -1) {
@@ -5166,6 +5166,12 @@ if (blockSettings.exists("Save")) {
 }
 EnemySpawn()
 ModShuffle(6, 7)
+forever(function () {
+    if (mySprite.vy >= 0 && (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor0`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor2`) || (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick74`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick72`)) || (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick5`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor4`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick35`)))) {
+        mySprite.vy = 0
+        mySprite.y = mySprite.tilemapLocation().y
+    }
+})
 game.onUpdateInterval(50, function () {
     if (ListStorage[19] == 40) {
         if (sprites.readDataNumber(mySprite, "Mana") < 100) {
@@ -5173,12 +5179,6 @@ game.onUpdateInterval(50, function () {
         }
     } else {
         ListStorage[19] = ListStorage[19] + 1
-    }
-})
-forever(function () {
-    if (mySprite.vy >= 0 && (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor0`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor2`) || (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick74`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick72`)) || (mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick5`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`Floor4`) || mySprite.tileKindAt(TileDirection.Bottom, assets.tile`BackBrick35`)))) {
-        mySprite.vy = 0
-        mySprite.y = mySprite.tilemapLocation().y
     }
 })
 game.onUpdateInterval(randint(1600, 7000), function () {
